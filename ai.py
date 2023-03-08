@@ -15,28 +15,27 @@ class ai():
 			enemy = "r"
 			
 		for i in self.victorystates:
-			if (gamestate[i[0]==enemy and gamestate[i[1]==enemy and gamestate[i[2]==enemy)
+			if (gamestate[i[0]]==enemy and gamestate[i[1]]==enemy and gamestate[i[2]]==enemy):
 				return -1 
-			elif (gamestate[i[0]==self.side and gamestate[i[1]==self.side and gamestate[i[2]==self.side)
+			elif (gamestate[i[0]]==self.side and gamestate[i[1]]==self.side and gamestate[i[2]]==self.side):
 				return 1
-			else
+			else:
 				return calcScore()
 						
-	def bestMove(self, gamestate): -
+	def bestMove(self, gamestate): 
 		availables = [] #available moves
-		
 		enemy = "b"
 		if self.side=="b":
 			enemy = "r"
 			
 		for i in self.victorystates:
-			if (gamestate[i[0]==enemy and gamestate[i[1]==enemy and gamestate[i[2]==enemy)
-				return -1 #code returns move to make, if move is -1, game is over
+			if (gamestate[i[0]]==enemy and gamestate[i[1]]==enemy and gamestate[i[2]]==enemy):
+				return -1 #code retWzurns move to make, if move is -1, game is over
 			
 		for i in range(len(gamestate)):
 			if gamestate[i] == "o":
 				availables.append(i)
-		scores = []ä
+		scores = []
 		map(calcScore,availables)
 			
 		

@@ -57,6 +57,9 @@ while True:
     
     contours2 = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
     
+    cx = 0
+    cy = 0
+    
     for i in contours2:
         M = cv2.moments(i)
         x,y,w,h = cv2.boundingRect(i)

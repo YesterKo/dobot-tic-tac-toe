@@ -1,22 +1,25 @@
 import cv2 
+from copy import deepcopy
 
 import numpy as np 
 
 class cameraMan():
     def __init__(self):
         self.cap = cv2.VideoCapture(4)
-        if cap.isOpened():
+        if self.cap.isOpened():
             print("Open")
         else:
             print("Failed to open camera")
-    def startCam(self):
-        if not cap.isOpened()
+        
+    async def startCam(self, showVideo, verbose): #figure out how to do this
+        cap = self.cap
+        if not cap.isOpened():
             cap = cv2.VideoCapture(4)
-        print(cap.isOpened())
+        if verbose: print(cap.isOpened())
         width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
         height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         
-        print(width,height) 
+        if verbose: print(width,height) 
         self.running = True
         while self.running:
             ret, img = cap.read()
@@ -24,8 +27,8 @@ class cameraMan():
             #cv2.imshow("bruh",img)
             #print(img)
             
-            cv2.imshow('Video',img)
-            image = img #cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            
+            image = deepcopy(img)
             
             lower_red = np.array([0, 0, 0], dtype = "uint8") 
             upper_red= np.array([10, 10, 255], dtype = "uint8")
@@ -42,9 +45,9 @@ class cameraMan():
           
             mask_red = cv2.inRange(img, lower_red, upper_red)
             mask_blue = cv2.inRange(img, lower_blue, upper_blue)
-            mask_black = cv2.inRange(image, lower_black, upper_black)
+            mask_black = cv2.inRange(img, lower_black, upper_black)
             
-            blur = cv2.GaussianBlur(image, (5, 5),cv2.BORDER_DEFAULT)
+            blur = cv2.GaussianBlur(img, (5, 5),cv2.BORDER_DEFAULT)
             
             red_out = cv2.bitwise_and(img, img, mask =  mask_red) 
             blue_out = cv2.bitwise_and(img, img, mask =  mask_blue) 
@@ -53,20 +56,12 @@ class cameraMan():
                 
             green_out = cv2.cvtColor(green_out, cv2.COLOR_BGR2GRAY)
             #green_out = 255-green_out
-            
-            
+
             
             ret, thresh = cv2.threshold(green_out,80,90,0)
             contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             imout = cv2.drawContours(img, contours, -1, (0,255,0), 3)
             
-            cv2.imshow("red color detection", red_out) 
-            cv2.imshow("blue color detection", blue_out) 
-            cv2.imshow('colorrr',green_out)
-            
-            self.red_out = red_out
-            self.blue_out = blue_out
-            self.green_out = green_out
             
             contours2 = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
             
@@ -80,22 +75,30 @@ class cameraMan():
                     if M['m00'] != 0:
                         cx = int(M['m10']/M['m00'])
                         cy = int(M['m01']/M['m00'])
-                        cv2.drawContours(image, [i], -1, (0, 255, 0), 2)
-                        cv2.circle(image, (cx, cy), 7, (0, 0, 255), -1)
-                        cv2.putText(image, "center", (cx - 20, cy - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                        cv2.drawContours(img, [i], -1, (0, 255, 0), 2)
+                        cv2.circle(img, (cx, cy), 7, (0, 0, 255), -1)
+                        cv2.putText(img, "center", (cx - 20, cy - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
                         
             if cx > 315 and cx  < 325 and cy > 235 and cy < 245:
-                print("centered")
+                if verbose: print("centered")
             else:
-                print(cx-320,cy-240)
+                if verbose: print(cx-320,cy-240)
                 
-            self.offsetX = cx-320
-            self.offsetY = cx-240
+            await self.offsetX = cx-320
+            await self.offsetY = cx-240
             #calibration z height - 70
             
             cv2.line(img,(0,0),(int(width),int(height)),(255,0,0),5)
             cv2.line(img,(0,int(height)),(int(width),0),(255,0,0),5)
             cv2.imshow("board color detection", img)
+            cv2.imshow('Video',image)
+            cv2.imshow("red color detection", red_out) 
+            cv2.imshow("blue color detection", blue_out) 
+            cv2.imshow('colorrr',green_out)
+            
+            self.red_out = red_out
+            self.blue_out = blue_out
+            self.green_out = green_out
             
             self.red_out = red_out
             self.blue_out = blue_out
@@ -110,7 +113,7 @@ class cameraMan():
         self.running = False
         
     def getOffset(self):
-        return (self.offsetX,self.offsetY)
+        return self.offsetX,self.offsetY
     
     
         

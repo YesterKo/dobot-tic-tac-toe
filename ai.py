@@ -1,3 +1,4 @@
+#the unused cousin of the minimax.py
 #Storing the game gamestate
 #|0|1|2|
 #|3|4|5|

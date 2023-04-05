@@ -7,14 +7,16 @@ class DobotBot:
         self.start_x = 0
         self.start_y = 150
         self.start_z = 0
+        self.red_stack = 5
+        self.blue_stack = 5
 
     def move_bot(self,siit,sinna):
         if siit == 10:
-            z = red_stack * 24 + self.start_z
-            red_stack -= 1
+            z = self.red_stack * 24 + self.start_z
+            self.red_stack -= 1
         if siit == 11:
-            z = blue_stack * 24 + self.start_z
-            blue_stack -= 1
+            z = self.blue_stack * 24 + self.start_z
+            self.blue_stack -= 1
         else: z = 24 + self.start_z
         
         self.go_home()
@@ -25,8 +27,10 @@ class DobotBot:
         self.dobot.suck(0)
         self.go_home()
 
-
-
+    def move_increment(self,x,y,z):
+        pose = self.dobot.pose() #tuple containing x,y,z,r,j1,j2,j3,j4
+        self.dobot.move_to(pose[0]+x,pose[1]+y,pose[2]+z)
+    
     def calibrate(self, x, y, z):
         self.start_x = x
         self.start_y = y
@@ -43,7 +47,10 @@ class DobotBot:
                     (x+70,y+35),
                     (x+70,y+70)
                     )
-
+    
+    def homeHeight(self):
+        self.move_increment(0,70-self.dobot.pose()[1],0) #move to y height of 70
+        
     def go_home(self):
         self.dobot.move_to(230, 0, 70, 0)
     

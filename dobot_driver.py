@@ -46,7 +46,9 @@ class DobotBot:
 
     def go_home(self):
         self.dobot.move_to(230, 0, 70, 0)
-
+    
+    def succ(self, state):
+        self.dobot.suck(state)
 # 255 -35 -71
 
 

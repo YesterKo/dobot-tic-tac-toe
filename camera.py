@@ -1,32 +1,27 @@
 import cv2 
+import asyncio
 from copy import deepcopy
 
 import numpy as np 
 
 class cameraMan():
     def __init__(self):
-        self.cap = cv2.VideoCapture(4)
+        self.cap = cv2.VideoCapture(0)
         if self.cap.isOpened():
             print("Open")
         else:
             print("Failed to open camera")
+        self.offsetX = 0
+        self.offsetY = 0
+        self.task = None
         
-    async def startCam(self, showVideo, verbose): #figure out how to do this
-        cap = self.cap
-        if not cap.isOpened():
-            cap = cv2.VideoCapture(4)
-        if verbose: print(cap.isOpened())
-        width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-        height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        
-        if verbose: print(width,height) 
-        self.running = True
-        while self.running:
-            ret, img = cap.read()
-            
+    async def cameraRunner(self,width,height,verbose):
+        while True:
+            cap = self.cap
+            print(cap.isOpened())
+            ret, img = cap.read() 
             #cv2.imshow("bruh",img)
             #print(img)
-            
             
             image = deepcopy(img)
             
@@ -56,7 +51,7 @@ class cameraMan():
                 
             green_out = cv2.cvtColor(green_out, cv2.COLOR_BGR2GRAY)
             #green_out = 255-green_out
-
+    
             
             ret, thresh = cv2.threshold(green_out,80,90,0)
             contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -84,8 +79,8 @@ class cameraMan():
             else:
                 if verbose: print(cx-320,cy-240)
                 
-            await self.offsetX = cx-320
-            await self.offsetY = cx-240
+            self.offsetX = cx-320
+            self.offsetY = cx-240
             #calibration z height - 70
             
             cv2.line(img,(0,0),(int(width),int(height)),(255,0,0),5)
@@ -105,12 +100,23 @@ class cameraMan():
             self.green_out = green_out
             self.image = image
             self.img = img
-            
-            if cv2.waitKey(1) & 0xFF==ord('q'):
-               break
-               
+    
+        
+    def startCam(self, showVideo, verbose): #figure out how to do this
+        cap = self.cap
+        if not cap.isOpened():
+            cap = cv2.VideoCapture(0)
+        if verbose: print(cap.isOpened())
+        width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        if verbose: print(width,height) 
+        loop = asyncio.get_event_loop()
+        self.task = loop.create_task(self.cameraRunner(width,height,verbose))
+        loop.run_until_complete(self.task)
+        
+        
     def stopCam(self):
-        self.running = False
+        self.task.cancel()
         
     def getOffset(self):
         return self.offsetX,self.offsetY

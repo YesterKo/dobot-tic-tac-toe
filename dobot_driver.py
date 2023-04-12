@@ -1,4 +1,6 @@
 import pydobot
+import time
+import threading
 
 class DobotBot:
 
@@ -9,6 +11,7 @@ class DobotBot:
         self.start_z = 0
         self.red_stack = 5
         self.blue_stack = 5
+        self.thread = None
 
     def move_bot(self,siit,sinna):
         if siit == 10:
@@ -29,33 +32,53 @@ class DobotBot:
 
     def move_increment(self,x,y,z):
         pose = self.dobot.pose() #tuple containing x,y,z,r,j1,j2,j3,j4
-        self.dobot.move_to(pose[0]+x,pose[1]+y,pose[2]+z)
+        self.dobot.move_to(pose[0]+x,pose[1]+y,pose[2]+z,0)
+        time.sleep(1)
     
-    def calibrate(self, x, y, z):
-        self.start_x = x
-        self.start_y = y
-        self.start_z = z
+    def calibMove(self):
+        print("movedcalib")
+        x = self.x_offset
+        y = self.y_offset
+        self.move_increment(-x/10,-y/10,0)
+        self.thread = None
+        
+    
+    def calibrate(self, x_offset, y_offset):
+        if self.thread is None:
+            thread = threading.Thread(target=self.calibMove)
+            thread.daemon = True
+            self.thread = thread
+            self.x_offset = x_offset
+            self.y_offset = y_offset
+            self.thread.start()
+            print("started")
+        
+        
+        #self.start_x = x
+        #self.start_y = y
+        #self.start_z = z
 
-        self.positions = (
-                    (x,y),
-                    (x,y+35),
-                    (x,y+70),
-                    (x+35,y),
-                    (x+35,y+35),
-                    (x+35,y+70),
-                    (x+70,y),
-                    (x+70,y+35),
-                    (x+70,y+70)
-                    )
+        #self.positions = (
+        #            (x,y),
+        #            (x,y+35),
+        #            (x,y+70),
+        #            (x+35,y),
+        #            (x+35,y+35),
+        #            (x+35,y+70),
+        #            (x+70,y),
+        #            (x+70,y+35),
+        #            (x+70,y+70)
+        #            )
     
     def homeHeight(self):
-        self.move_increment(0,70-self.dobot.pose()[1],0) #move to y height of 70
+        self.move_increment(0,0,70) #move to y height of 70 (from the ground)
         
     def go_home(self):
         self.dobot.move_to(230, 0, 70, 0)
     
     def succ(self, state):
         self.dobot.suck(state)
+        
 # 255 -35 -71
 
 

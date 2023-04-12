@@ -1,12 +1,11 @@
 import cv2 
-import asyncio
 from copy import deepcopy
-
 import numpy as np 
+import threading
 
 class cameraMan():
     def __init__(self):
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(4)
         if self.cap.isOpened():
             print("Open")
         else:
@@ -15,10 +14,16 @@ class cameraMan():
         self.offsetY = 0
         self.task = None
         
-    async def cameraRunner(self,width,height,verbose):
+        self.red_out = None
+        self.blue_out = None
+        self.green_out = None
+        self.image = None
+        self.img = None
+        
+    def cameraRunner(self,width,height,verbose):
         while True:
             cap = self.cap
-            print(cap.isOpened())
+            #print(cap.isOpened())
             ret, img = cap.read() 
             #cv2.imshow("bruh",img)
             #print(img)
@@ -80,20 +85,16 @@ class cameraMan():
                 if verbose: print(cx-320,cy-240)
                 
             self.offsetX = cx-320
-            self.offsetY = cx-240
+            self.offsetY = cy-240
             #calibration z height - 70
             
             cv2.line(img,(0,0),(int(width),int(height)),(255,0,0),5)
             cv2.line(img,(0,int(height)),(int(width),0),(255,0,0),5)
-            cv2.imshow("board color detection", img)
-            cv2.imshow('Video',image)
-            cv2.imshow("red color detection", red_out) 
-            cv2.imshow("blue color detection", blue_out) 
-            cv2.imshow('colorrr',green_out)
-            
-            self.red_out = red_out
-            self.blue_out = blue_out
-            self.green_out = green_out
+            #cv2.imshow("board color detection", img)
+            #cv2.imshow('Video',image)
+            #cv2.imshow("red color detection", red_out) 
+            #cv2.imshow("blue color detection", blue_out) 
+            #cv2.imshow('colorrr',green_out)
             
             self.red_out = red_out
             self.blue_out = blue_out
@@ -102,21 +103,29 @@ class cameraMan():
             self.img = img
     
         
-    def startCam(self, showVideo, verbose): #figure out how to do this
+    def startCam(self, verbose): #figure out how to do this
         cap = self.cap
         if not cap.isOpened():
-            cap = cv2.VideoCapture(0)
+            cap = cv2.VideoCapture(4)
         if verbose: print(cap.isOpened())
         width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
         height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         if verbose: print(width,height) 
-        loop = asyncio.get_event_loop()
-        self.task = loop.create_task(self.cameraRunner(width,height,verbose))
-        loop.run_until_complete(self.task)
-        
-        
+        thread = threading.Thread(target=self.cameraRunner, args=(width,height,verbose))
+        thread.daemon = True
+        thread.start()
+        self.thread = thread
+   
+    def getCam(self,camera):
+        output = eval("self."+camera)
+        return (output)
+    
     def stopCam(self):
-        self.task.cancel()
+        print("stopping")
+        self.cap.release()
+        self.thread.stop()
+        print("stopped")
+        return True
         
     def getOffset(self):
         return self.offsetX,self.offsetY

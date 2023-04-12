@@ -1,7 +1,9 @@
 from camera import cameraMan
 from dobot_driver import DobotBot
+import keyboard
 import minimax
-
+import time
+import cv2
 
 print("------------Welcome to dobot tic-tac-toe------------")
 print("Please select the gamemode:")
@@ -11,8 +13,46 @@ physical = True #if input("Physical or virtual? ").upper()=="Physical".upper() e
 print(physical)
 
 cam = cameraMan()
+dobot = DobotBot("/dev/ttyUSB1")
+
+initializing = True
+print("Please align the robot to so the suction cup is on the playing field in the middle below the grid")
+print("After you're done, press space")
+cam.startCam(False)
+while initializing:
+	camera = cam.getCam("img")
+	if camera is not None:
+			if camera.shape[0] > 0:
+				cv2.imshow("img",camera)
+				if cv2.waitKey(1) & 0xFF==ord('q'):
+					exit()
+	if keyboard.is_pressed("space"):
+		initializing = False
+
+dobot.homeHeight()
+print("Successfully initalized!")
+print("Calibrating...")
+
+
+
+calibrating = True
+while calibrating:
+	print("Current offset:","X:",cam.getOffset()[1],"Y:",cam.getOffset()[0],)
+	camera = cam.getCam("img")
+	if camera is not None:
+		if camera.shape[0] > 0:
+			cv2.imshow("img",camera)
+	if cv2.waitKey(1) & 0xFF==ord('q'):
+		exit()
+	dobot.calibrate(cam.getOffset()[1],cam.getOffset()[0])
+	if cam.getOffset()[0]>-2 and cam.getOffset()[0]<2 and cam.getOffset()[1]>-2 and cam.getOffset()[1]<2:
+		print("Succesfully calibrated!")
+		calibrating = False
+		
 if physical:
-	cam.startCam(True,False)
-	print("Hwwy")
-	while True:
-		print(cam.getOffset())
+	running = True
+	while running: #idk if this is the correct way of doing this, but it doesn't matter that much
+		cv2.imshow("img",camera)
+		if cv2.waitKey(1) & 0xFF==ord('q'):
+			exit()
+		

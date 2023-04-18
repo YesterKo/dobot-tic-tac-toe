@@ -7,7 +7,7 @@ class DobotBot:
     def __init__(self,port):
         self.dobot = pydobot.Dobot(port)
         self.start_x = 0
-        self.start_y = 150
+        self.start_y = 0
         self.start_z = 0
         self.red_stack = 5
         self.blue_stack = 5
@@ -69,12 +69,16 @@ class DobotBot:
         #            (x+70,y+35),
         #            (x+70,y+70)
         #            )
-    
-    def homeHeight(self):
-        self.move_increment(0,0,70) #move to y height of 70 (from the ground)
+    def setHome(self)
+        self.start_x = self.dobot.pose()[0]
+        self.start_y = self.dobot.pose()[1]
+        self.start_z = self.dobot.pose()[2]
+        
+    def calibHeight(self):
+        self.move_increment(0,0,70) #move to z height of 70 (from the ground)
         
     def go_home(self):
-        self.dobot.move_to(230, 0, 70, 0)
+        self.dobot.move_to(self.start_x, self.start_y, self.start_z, 0)
     
     def succ(self, state):
         self.dobot.suck(state)

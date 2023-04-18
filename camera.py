@@ -16,7 +16,7 @@ class cameraMan():
         
         self.red_out = None
         self.blue_out = None
-        self.green_out = None
+        self.pink_out = None
         self.image = None
         self.img = None
         
@@ -40,25 +40,25 @@ class cameraMan():
             #lower_black = np.array([190], dtype = "uint8") 
             #upper_black= np.array([255], dtype = "uint8")
             
-            lower_black = np.array([40, 20, 65], dtype = "uint8") 
-            upper_black= np.array([181, 111, 190], dtype = "uint8")     
+            lower_pink = np.array([40, 20, 65], dtype = "uint8") 
+            upper_pink= np.array([181, 111, 190], dtype = "uint8")     
           
             mask_red = cv2.inRange(img, lower_red, upper_red)
             mask_blue = cv2.inRange(img, lower_blue, upper_blue)
-            mask_black = cv2.inRange(img, lower_black, upper_black)
+            mask_pink = cv2.inRange(img, lower_pink, upper_pink)
             
             blur = cv2.GaussianBlur(img, (5, 5),cv2.BORDER_DEFAULT)
             
             red_out = cv2.bitwise_and(img, img, mask =  mask_red) 
             blue_out = cv2.bitwise_and(img, img, mask =  mask_blue) 
-            green_out = cv2.bitwise_and(blur, blur, mask =  mask_black) 
+            pink_out = cv2.bitwise_and(blur, blur, mask =  mask_pink) 
             
                 
-            green_out = cv2.cvtColor(green_out, cv2.COLOR_BGR2GRAY)
+            pink_out = cv2.cvtColor(pink_out, cv2.COLOR_BGR2GRAY)
             #green_out = 255-green_out
     
             
-            ret, thresh = cv2.threshold(green_out,80,90,0)
+            ret, thresh = cv2.threshold(pinki_out,80,90,0)
             contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             imout = cv2.drawContours(img, contours, -1, (0,255,0), 3)
             
@@ -98,7 +98,7 @@ class cameraMan():
             
             self.red_out = red_out
             self.blue_out = blue_out
-            self.green_out = green_out
+            self.pink_out = pink_out
             self.image = image
             self.img = img
     
@@ -129,6 +129,8 @@ class cameraMan():
         
     def getOffset(self):
         return self.offsetX,self.offsetY
+        
+    
     
     
         

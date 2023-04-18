@@ -29,7 +29,7 @@ while initializing:
 	if keyboard.is_pressed("space"):
 		initializing = False
 
-dobot.homeHeight()
+dobot.calibHeight()
 print("Successfully initalized!")
 print("Calibrating...")
 
@@ -48,11 +48,18 @@ while calibrating:
 	if cam.getOffset()[0]>-2 and cam.getOffset()[0]<2 and cam.getOffset()[1]>-2 and cam.getOffset()[1]<2:
 		print("Succesfully calibrated!")
 		calibrating = False
-		
+		dobot.setHome()
+
+
 if physical:
+	camera = cam.getCam("img")
+	blue = cam.getCam("blue_out")
+	red = cam.getCam("red_out")
 	running = True
 	while running: #idk if this is the correct way of doing this, but it doesn't matter that much
 		cv2.imshow("img",camera)
+		cv2.imshow("blue",blue)
+		cv2.imshow("red",red)
 		if cv2.waitKey(1) & 0xFF==ord('q'):
 			exit()
 		

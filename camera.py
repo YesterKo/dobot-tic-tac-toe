@@ -58,7 +58,7 @@ class cameraMan():
             #green_out = 255-green_out
     
             
-            ret, thresh = cv2.threshold(pinki_out,80,90,0)
+            ret, thresh = cv2.threshold(pink_out,80,90,0)
             contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             imout = cv2.drawContours(img, contours, -1, (0,255,0), 3)
             

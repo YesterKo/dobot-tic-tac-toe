@@ -1,5 +1,4 @@
 import pydobot
-import time
 import threading
 
 class DobotBot:
@@ -30,10 +29,11 @@ class DobotBot:
         self.dobot.suck(0)
         self.go_home()
 
+        
+    
     def move_increment(self,x,y,z):
         pose = self.dobot.pose() #tuple containing x,y,z,r,j1,j2,j3,j4
-        self.dobot.move_to(pose[0]+x,pose[1]+y,pose[2]+z,0)
-        time.sleep(1)
+        self.dobot.move_to(pose[0]+x,pose[1]+y,pose[2]+z,0,wait=True)
     
     def calibMove(self):
         print("movedcalib")
@@ -58,27 +58,39 @@ class DobotBot:
         #self.start_y = y
         #self.start_z = z
 
-        #self.positions = (
-        #            (x,y),
-        #            (x,y+35),
-        #            (x,y+70),
-        #            (x+35,y),
-        #            (x+35,y+35),
-        #            (x+35,y+70),
-        #            (x+70,y),
-        #            (x+70,y+35),
-        #            (x+70,y+70)
-        #            )
-    def setHome(self)
+
+    def goToPos(self,position):
+        pos = self.positions[position]
+        self.dobot.move_to(pos[0],pos[1],self.start_z-60,0,wait=True)
+        
+    def setHome(self):
         self.start_x = self.dobot.pose()[0]
         self.start_y = self.dobot.pose()[1]
         self.start_z = self.dobot.pose()[2]
         
+        x = self.start_x
+        y = self.start_y
+        
+        self.positions = (
+                    (x+35,y-30), #squares 1-9
+                    (x+35,y+5),
+                    (x+35,y+40),
+                    (x+70,y-30),
+                    (x+70,y+5),
+                    (x+70,y+40),
+                    (x+105,y-30),
+                    (x+105,y+5),
+                    (x+105,y+40),
+                    (x+70,y+90), #red stack
+                    (x+70,y-80), #blue stack
+                    )
+        return (self.start_x,self.start_y,self.start_z)
+                   
     def calibHeight(self):
         self.move_increment(0,0,70) #move to z height of 70 (from the ground)
         
     def go_home(self):
-        self.dobot.move_to(self.start_x, self.start_y, self.start_z, 0)
+        self.dobot.move_to(self.start_x, self.start_y, self.start_z, 0,wait=True)
     
     def succ(self, state):
         self.dobot.suck(state)

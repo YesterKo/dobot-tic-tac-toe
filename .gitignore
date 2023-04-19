@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# DOBOT nagemine trips-traps-trull*
+dobotnageminetripstrapstrull*
+
 # Distribution / packaging
 .Python
 build/

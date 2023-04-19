@@ -14,7 +14,7 @@ naide_seis = [['b', 'r', 'o'], ['o', 'o', 'o'], ['o', 'o', 'o']]
 def push_data_to_sheet(seis, sheet_id, sheet_name):
     df = pd.DataFrame(seis)
     df.dropna()
-    gc = pygsheets.authorize(service_file='vaja lisada fail git ignorei') # TODO: tegele service account credentialitega
+    gc = pygsheets.authorize(service_file='dobotnageminetripstrapstrull-bf6a690980de.json')
     sh = gc.open(f'https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}')
     wks = sh.sheet1
     wks.set_dataframe(df,(1,1))

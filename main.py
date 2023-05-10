@@ -8,7 +8,7 @@ print("------------Welcome to dobot tic-tac-toe------------")
 print("Please select the gamemode:")
 print("Physical mode - place blocks by hand in the real world")
 print("Virtual mode - place blocks in the sheet and the robot moves the blocks onto the board")
-physical = True #if input("Physical or virtual? ").upper()=="Physical".upper() else False
+physical = False #if input("Physical or virtual? ").upper()=="Physical".upper() else False
 print(physical)
 
 cam = cameraMan()
@@ -77,11 +77,13 @@ else:
 print("The robot will now proceed to go to the position of each square.")
 print("Please confirm that the square locations are correct and if nescessary, recalibrate")
 
+for i in range(12):
+	dobot.goToPos(i)
+dobot.go_home()
+
 if physical:
 	running = True
-	for i in range(11):
-		dobot.goToPos(i)
-	dobot.go_home()
+	
 	while running: #idk if this is the correct way of doing this, but it doesn't matter that much
 		camera = cam.getCam("img")
 		blue = cam.getCam("blue_out")
@@ -91,4 +93,5 @@ if physical:
 		cv2.imshow("red",red)
 		if cv2.waitKey(1) & 0xFF==ord('q'):
 			exit()
-		
+else:
+	

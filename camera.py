@@ -108,8 +108,12 @@ class cameraMan():
         if not cap.isOpened():
             cap = cv2.VideoCapture(4)
         if verbose: print(cap.isOpened())
-        width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-        height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        width = 640
+        height = 480
+        print(width)
+        print(height)
         if verbose: print(width,height) 
         thread = threading.Thread(target=self.cameraRunner, args=(width,height,verbose))
         thread.daemon = True

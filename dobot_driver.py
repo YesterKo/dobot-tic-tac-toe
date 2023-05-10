@@ -83,6 +83,7 @@ class DobotBot:
                     (x+105,y+40),
                     (x+70,y+90), #red stack
                     (x+70,y-80), #blue stack
+                    (x,y)
                     )
         return (self.start_x,self.start_y,self.start_z)
                    

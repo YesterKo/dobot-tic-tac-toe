@@ -29,8 +29,38 @@ class DobotBot:
         self.dobot.suck(0)
         self.go_home()
 
+    def place_block(self,color,pos): #pos 0-8, color blue or red
+        #pos 3
+        if color == "red":
+            size = self.red_stack
+            stack = 9
+        else:
+            size = self.blue_stack
+            stack = 10
         
-    
+        height = self.start_z-64+24*size
+        print(height)
+        pose = self.dobot.pose()
+        positions = self.positions
+        
+        self.dobot.move_to(pose[0],pose[1],height,0,wait=True)
+        self.dobot.move_to(positions[stack][0],positions[stack][1],height,0,wait=True)
+        self.move_increment(0,0,-10)
+        self.succ(True)
+        self.move_increment(0,0,30)
+        self.dobot.move_to(positions[pos][0],positions[pos][1],height+10,0,wait=True)
+        self.dobot.move_to(positions[pos][0],positions[pos][1],self.start_z-56,0,wait=True)
+        self.succ(False)
+        self.move_increment(0,0,30)
+        self.go_home()
+        
+        size-=1
+        
+        if color == "red":
+            self.red_stack=size
+        else:
+            self.blue_stack=size
+            
     def move_increment(self,x,y,z):
         pose = self.dobot.pose() #tuple containing x,y,z,r,j1,j2,j3,j4
         self.dobot.move_to(pose[0]+x,pose[1]+y,pose[2]+z,0,wait=True)
@@ -88,7 +118,7 @@ class DobotBot:
         return (self.start_x,self.start_y,self.start_z)
                    
     def calibHeight(self):
-        self.move_increment(0,0,70) #move to z height of 70 (from the ground)
+        self.move_increment(0,0,80) #move to z height of 70 (from the ground)
         
     def go_home(self):
         self.dobot.move_to(self.start_x, self.start_y, self.start_z, 0,wait=True)

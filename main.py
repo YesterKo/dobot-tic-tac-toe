@@ -77,10 +77,16 @@ else:
 print("The robot will now proceed to go to the position of each square.")
 print("Please confirm that the square locations are correct and if nescessary, recalibrate")
 
-for i in range(12):
-	dobot.goToPos(i)
+#for i in range(12):
+#	dobot.goToPos(i)
 dobot.go_home()
 
+print("Place the blocks and press space")
+placing = True
+while placing:
+	if keyboard.is_pressed("space"):
+			placing = False
+			
 if physical:
 	running = True
 	
@@ -94,4 +100,15 @@ if physical:
 		if cv2.waitKey(1) & 0xFF==ord('q'):
 			exit()
 else:
+	print("lmao")
+	#dobot.place_block("red",4)
+	#dobot.place_block("red",2)
+	#dobot.place_block("red",6)
+	#dobot.place_block("red",0)
+	#dobot.place_block("red",8)
+	dobot.place_block("blue",4)
+	dobot.place_block("blue",2)
+	dobot.place_block("blue",6)
+	dobot.place_block("blue",0)
+	dobot.place_block("blue",8)
 	

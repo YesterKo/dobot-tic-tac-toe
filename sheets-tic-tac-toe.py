@@ -12,8 +12,8 @@ while True:
     time.sleep(1)
     board_state = leht.get_data_from_sheet()
     if minimax.winner(board_state): break
-    if board_state != old_board_state:
-        move = minimax(board)
+    if str(board_state) != str(old_board_state):
+        move = minimax.minimax(board_state)
         board_state[move[0]][move[1]] = 'O'
         leht.push_data_to_sheet(board_state)
         old_board_state = board_state

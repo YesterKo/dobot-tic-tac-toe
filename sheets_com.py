@@ -1,6 +1,6 @@
 import pandas as pd
 import pygsheets
-# https://docs.google.com/spreadsheets/d/1YZTYIE4sfvTNDYRF8hQObEbRfSvaMIv0aTk6Cgih7gA/gviz/tq?tqx=out:csv&sheet=Sheet1
+# https://docs.google.com/spreadsheets/d/1YZTYIE4sfvTNDYRF8hQObEbRfSvaMIv0aTk6Cgih7gA/
 SHEET_ID = '1YZTYIE4sfvTNDYRF8hQObEbRfSvaMIv0aTk6Cgih7gA'
 SHEET_NAME = 'Sheet1'
 
@@ -14,7 +14,8 @@ class Sheet():
 
     def get_data_from_sheet(self):
         url = f'https://docs.google.com/spreadsheets/d/{self.sheet_id}/gviz/tq?tqx=out:csv&sheet={self.sheet_name}'
-        df = pd.read_csv(url).values.tolist()
+        # test = pd.read_csv(url, dtype=str, keep_default_na=False)
+        df = pd.read_csv(url).astype(str).values.tolist() #! KOGU KURJA JUUR!!!
         return df
 
     # df = get_data_from_sheet(SHEET_ID, SHEET_NAME)
@@ -28,6 +29,7 @@ class Sheet():
         return True
     
 leht = Sheet(SHEET_ID, SHEET_NAME)
+print(leht.get_data_from_sheet())
 # df = leht.push_data_to_sheet(naide_seis)
 # # df = pd.read_csv(url).values.tolist()
 # # df = [j for sub in df for j in sub if type(j)!=float]

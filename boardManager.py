@@ -8,7 +8,6 @@ O = "O"
 EMPTY = None
 
 class Board():
-
     def __init__(self):# Initializing the board
     
         self.board = [[EMPTY, EMPTY, EMPTY],

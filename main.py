@@ -1,7 +1,7 @@
 from camera import CameraMan
 from dobot_driver import DobotBot
 from sheets_com import Sheet
-from minimax import Board
+from boardManager import Board
 import keyboard
 import cv2
 

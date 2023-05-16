@@ -7,16 +7,16 @@ X = "X"
 O = "O"
 EMPTY = None
 
-class Minimax():
+class Board():
 
-    def __INIT__():                                # Initializing the board
+    def __init__(self):# Initializing the board
     
-        return [[EMPTY, EMPTY, EMPTY],
-                [EMPTY, EMPTY, EMPTY],
-                [EMPTY, EMPTY, EMPTY]]
+        self.board = [[EMPTY, EMPTY, EMPTY],
+                     [EMPTY, EMPTY, EMPTY],
+                     [EMPTY, EMPTY, EMPTY]]
     
     
-    def player(board):
+    def player(self, board):
         """
         Returns player who has the next turn on a board.
         """
@@ -30,7 +30,7 @@ class Minimax():
         return X
     
     
-    def actions(board):
+    def actions(self, board):
         """
         Returns set of all possible actions (i, j) available on the board.
         """
@@ -43,18 +43,18 @@ class Minimax():
         return res
     
     
-    def result(board, action):
+    def result(self, board, action):
         """
         Returns the board that results from making move (i, j) on the board.
         """
-        curr_player = player(board)
+        curr_player = self.player(board)
         result_board = copy.deepcopy(board)
         (i, j) = action
         result_board[i][j] = curr_player
         return result_board
     
     
-    def get_horizontal_winner(board):
+    def get_horizontal_winner(self, board):
         # check horizontally
         winner_val = None
         board_len = len(board)
@@ -68,7 +68,7 @@ class Minimax():
         return winner_val
     
     
-    def get_vertical_winner(board):
+    def get_vertical_winner(self, board):
         # check vertically
         winner_val = None
         board_len = len(board)
@@ -82,7 +82,7 @@ class Minimax():
         return winner_val
     
     
-    def get_diagonal_winner(board):
+    def get_diagonal_winner(self, board):
         # check diagonally
         winner_val = None
         board_len = len(board)
@@ -102,11 +102,11 @@ class Minimax():
         return winner_val
     
     
-    def winner(board):
+    def winner(self, board):
         """
         Returns the winner of the game, if there is one.
         """
-        winner_val = get_horizontal_winner(board) or get_vertical_winner(board) or get_diagonal_winner(board) or None
+        winner_val = self.get_horizontal_winner(board) or self.get_vertical_winner(board) or self.get_diagonal_winner(board) or None
         return winner_val
     
     
@@ -114,7 +114,7 @@ class Minimax():
         """
         Returns True if game is over, False otherwise.
         """
-        if winner(board) != None:
+        if self.winner(board) != None:
             return True
     
         for i in board:
@@ -123,25 +123,25 @@ class Minimax():
                     return False
         return True
     
-    def utility(board):
+    def utility(self, board):
         """
         Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
         """
-        winner_val = winner(board)
+        winner_val = self.winner(board)
         if winner_val == X:
             return 1
         elif winner_val == O:
             return -1
         return 0
     
-    def max_value(board):
-        if terminal(board):
-            return utility(board), None
+    def max_value(self, board):
+        if self.terminal(board):
+            return self.utility(board), None
     
         v = float('-inf')
         move = None
-        for action in actions(board):
-            x, _ = min_value(result(board, action))
+        for action in self.actions(board):
+            x, _ = self.min_value(self.result(board, action))
             if x > v:
                 v = x
                 move = action
@@ -151,14 +151,14 @@ class Minimax():
         return v, move
     
     
-    def min_value(board):
-        if terminal(board):
-            return utility(board), None
+    def min_value(self, board):
+        if self.terminal(board):
+            return self.utility(board), None
     
         v = float('inf')
         move = None
-        for action in actions(board):
-            x, _ = max_value(result(board, action))
+        for action in self.actions(board):
+            x, _ = self.max_value(self.result(board, action))
             if x < v:
                 v = x
                 move = action
@@ -167,21 +167,21 @@ class Minimax():
     
         return v, move
     
-    def minimax(board):
+    def minimax(self, board):
         """
         Returns the optimal action for the current player on the board.
         """
-        if terminal(board):
+        if self.terminal(board):
             return None
         else:
-            if player(board) == X:
-                _, move = max_value(board)
+            if self.player(board) == X:
+                _, move = self.max_value(board)
                 return move
             else:
-                _, move = min_value(board)
+                _, move = self.min_value(board)
                 return move
       
-    def print_board(board):
+    def print_board(self, board):
         print("\n")
         for row in board:
             print(row, )
@@ -190,10 +190,10 @@ class Minimax():
     
     
     
-    if __name__ == "__main__":
-        board = [[X, O, EMPTY],
-                [X, O, EMPTY],
-                [EMPTY, EMPTY, EMPTY]]
+    #if __name__ == "__main__":
+    #    board = [[X, O, EMPTY],
+    #            [X, O, EMPTY],
+    #            [EMPTY, EMPTY, EMPTY]]
     
         move = minimax(board)
         print(move)

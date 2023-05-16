@@ -20,7 +20,6 @@ class DobotBot:
             z = self.blue_stack * 24 + self.start_z
             self.blue_stack -= 1
         else: z = 24 + self.start_z
-        
         self.go_home()
         self.dobot.move_to(self.positions[siit][0], self.positions[siit][1], z, 0)
         self.dobot.suck(1)
@@ -43,16 +42,25 @@ class DobotBot:
         pose = self.dobot.pose()
         positions = self.positions
         
-        self.dobot.move_to(pose[0],pose[1],height,0,wait=True)
-        self.dobot.move_to(positions[stack][0],positions[stack][1],height,0,wait=True)
-        self.move_increment(0,0,-10)
-        self.succ(True)
-        self.move_increment(0,0,30)
-        self.dobot.move_to(positions[pos][0],positions[pos][1],height+10,0,wait=True)
-        self.dobot.move_to(positions[pos][0],positions[pos][1],self.start_z-56,0,wait=True)
-        self.succ(False)
-        self.move_increment(0,0,30)
-        self.go_home()
+        try:
+            self.dobot.move_to(pose[0],pose[1],height,0,wait=True)
+            self.dobot.move_to(positions[stack][0],positions[stack][1],height,0,wait=True)
+            self.move_increment(0,0,-10)
+            self.succ(True)
+            self.move_increment(0,0,30)
+            self.dobot.move_to(positions[pos][0],positions[pos][1],height+10,0,wait=True)
+            self.dobot.move_to(positions[pos][0],positions[pos][1],self.start_z-56,0,wait=True)
+            self.succ(False)
+            self.move_increment(0,0,30)
+            self.go_home()
+        except:
+            print("Something broke, attempting to return home...")
+            try:
+                pose = self.dobot.pose()
+                self.dobot.move_to(pose[0],pose[1],100,0,wait=True)
+                self.go_home()
+            except:
+                print("Error returning home")
         
         size-=1
         

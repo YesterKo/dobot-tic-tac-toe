@@ -1,5 +1,6 @@
-from camera import cameraMan
+from camera import CameraMan
 from dobot_driver import DobotBot
+from sheets_com import Sheet
 import keyboard
 import minimax
 import cv2
@@ -11,8 +12,8 @@ print("Virtual mode - place blocks in the sheet and the robot moves the blocks o
 physical = False #if input("Physical or virtual? ").upper()=="Physical".upper() else False
 print(physical)
 
-cam = cameraMan()
-dobot = DobotBot("/dev/ttyUSB0")
+#cam = CameraMan()
+#dobot = DobotBot("/dev/ttyUSB0")
 
 calib = False
 
@@ -27,7 +28,7 @@ with open("coords.txt","r") as file:
 		calib = True
 
 print(coords)
-cam.startCam(False)
+#cam.startCam(False)
 
 if not calib:
 	if input("Do you want to calibrate again? ").lower() == "yes":
@@ -71,22 +72,26 @@ if calib:
 				file.writelines([str(i)+"\n" for i in coords])
 
 else:
-	dobot.dobot.move_to(coords[0],coords[1],coords[2],0,wait=True)
-	dobot.setHome()	
+	print("bro")
+	#dobot.dobot.move_to(coords[0],coords[1],coords[2],0,wait=True)
+	#dobot.setHome()	
 
 print("The robot will now proceed to go to the position of each square.")
 print("Please confirm that the square locations are correct and if nescessary, recalibrate")
 
 #for i in range(12):
 #	dobot.goToPos(i)
-dobot.go_home()
+#dobot.go_home()
 
 print("Place the blocks and press space")
 placing = True
 while placing:
 	if keyboard.is_pressed("space"):
 			placing = False
-			
+		
+		
+sheet = Sheet("1YZTYIE4sfvTNDYRF8hQObEbRfSvaMIv0aTk6Cgih7gA","Sheet1")
+	
 if physical:
 	running = True
 	
@@ -100,15 +105,19 @@ if physical:
 		if cv2.waitKey(1) & 0xFF==ord('q'):
 			exit()
 else:
-	print("lmao")
+	data = sheet.get_data_from_sheet()
+	print(data)
+	print(type(data))
+	#print("lmao")
+	
 	#dobot.place_block("red",4)
 	#dobot.place_block("red",2)
 	#dobot.place_block("red",6)
 	#dobot.place_block("red",0)
 	#dobot.place_block("red",8)
-	dobot.place_block("blue",4)
-	dobot.place_block("blue",2)
-	dobot.place_block("blue",6)
-	dobot.place_block("blue",0)
-	dobot.place_block("blue",8)
+	#dobot.place_block("blue",4)
+	#dobot.place_block("blue",2)
+	#dobot.place_block("blue",6)
+	#dobot.place_block("blue",0)
+	#dobot.place_block("blue",8)
 	

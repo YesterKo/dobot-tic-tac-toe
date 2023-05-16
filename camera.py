@@ -3,7 +3,7 @@ from copy import deepcopy
 import numpy as np 
 import threading
 
-class cameraMan():
+class CameraMan():
     def __init__(self):
         self.cap = cv2.VideoCapture(4)
         if self.cap.isOpened():

@@ -3,8 +3,8 @@ import math
 import random
 
 
-X = "X"
-O = "O"
+X = "r"
+O = "b"
 EMPTY = None
 
 class Board():
@@ -187,12 +187,23 @@ class Board():
             
         print("\n")
     
+    def set_board(self,board):
+        """
+        Set the board of the game (if u want to for example fetch the board from gsheets)
+        """
+        self.board = board
     
+    def make_move(self,side,move):
+        """
+        Place a block of a player (r or b) in a slot 0-8
+        """
+        #needs to be implemented
+        
     
     #if __name__ == "__main__":
     #    board = [[X, O, EMPTY],
     #            [X, O, EMPTY],
     #            [EMPTY, EMPTY, EMPTY]]
     
-        move = minimax(board)
-        print(move)
+        #move = minimax(board)
+        #print(move)

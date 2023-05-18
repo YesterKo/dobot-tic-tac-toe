@@ -73,14 +73,14 @@ if calib:
 
 else:
 	print("bro")
-	dobot.dobot.move_to(coords[0],coords[1],coords[2],0,wait=True)
-	dobot.setHome()	
+	#dobot.dobot.move_to(coords[0],coords[1],coords[2],0,wait=True)
+	#dobot.setHome()	
 
 print("The robot will now proceed to go to the position of each square.")
 print("Please confirm that the square locations are correct and if nescessary, recalibrate")
 
-for i in range(12):
-	dobot.goToPos(i)
+#for i in range(12):
+#	dobot.goToPos(i)
 #dobot.go_home()
 
 print("Place the blocks and press space")
@@ -91,7 +91,8 @@ while placing:
 		
 		
 sheet = Sheet("1YZTYIE4sfvTNDYRF8hQObEbRfSvaMIv0aTk6Cgih7gA","Sheet1")
-	
+boardman = Board()
+
 if physical:
 	running = True
 	
@@ -110,7 +111,9 @@ else:
 	data = [[ None if e == "nan" else e for e in i ] for i in data] #replace nan with None
 	print(data)
 	
-	
+	boardman.set_board(data)
+	boardman.print_board(boardman.board)
+		
 	#print("lmao")
 	
 	#dobot.place_block("red",4)

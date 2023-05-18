@@ -30,7 +30,7 @@ class DobotBot:
 
     def place_block(self,color,pos): #pos 0-8, color blue or red
         #pos 3
-        if color == "red":
+        if color == "r":
             size = self.red_stack
             stack = 9
         else:
@@ -64,13 +64,16 @@ class DobotBot:
         
         size-=1
         
-        if color == "red":
+        if color == "r":
             self.red_stack=size
         else:
             self.blue_stack=size
     
-    def remove_block(self,color,pos): #move block back
-        if color == "red":
+    
+    
+    
+    def remove_block(self,color,pos): #move block back to it's stack
+        if color == "r":
             size = self.red_stack
             stack = 9
         else:
@@ -91,7 +94,7 @@ class DobotBot:
         
         size+=1
         
-        if color == "red":
+        if color == "r":
             self.red_stack=size
         else:
             self.blue_stack=size

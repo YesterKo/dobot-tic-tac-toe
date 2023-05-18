@@ -15,6 +15,7 @@ class Sheet():
     def get_data_from_sheet(self):
         url = f'https://docs.google.com/spreadsheets/d/{self.sheet_id}/gviz/tq?tqx=out:csv&sheet={self.sheet_name}'
         # test = pd.read_csv(url, dtype=str, keep_default_na=False)
+        #DO NOT add NUMBERS into the CSV thing or it will only get the numbers fro you and not alphabetical characters
         df = pd.read_csv(url).astype(str) #! KOGU KURJA JUUR!!!
         print(df)
         data = df.drop(df.columns[0],axis=1).values.tolist() #saab actual board data kätte

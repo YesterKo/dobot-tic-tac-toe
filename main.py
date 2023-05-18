@@ -1,7 +1,7 @@
 from camera import CameraMan
 from dobot_driver import DobotBot
 from sheets_com import Sheet
-from boardManager import Board
+from boardmanager import Board
 import keyboard
 import cv2
 
@@ -12,8 +12,8 @@ print("Virtual mode - place blocks in the sheet and the robot moves the blocks o
 physical = False #if input("Physical or virtual? ").upper()=="Physical".upper() else False
 print(physical)
 
-cam = CameraMan()
-dobot = DobotBot("/dev/ttyUSB0")
+#cam = CameraMan()
+#dobot = DobotBot("/dev/ttyUSB0")
 
 calib = False
 
@@ -28,7 +28,7 @@ with open("coords.txt","r") as file:
 		calib = True
 
 print(coords)
-cam.startCam(False)
+#cam.startCam(False)
 
 if not calib:
 	if input("Do you want to calibrate again? ").lower() == "yes":
@@ -81,7 +81,7 @@ print("Please confirm that the square locations are correct and if nescessary, r
 
 for i in range(12):
 	dobot.goToPos(i)
-dobot.go_home()
+#dobot.go_home()
 
 print("Place the blocks and press space")
 placing = True

@@ -106,13 +106,21 @@ if physical:
 		if cv2.waitKey(1) & 0xFF==ord('q'):
 			exit()
 else:
-	data = sheet.get_data_from_sheet()
-	print(data)
-	data = [[ None if e == "nan" else e for e in i ] for i in data] #replace nan with None
-	print(data)
+	while True:
+		input("Press enter to get data from google sheets and place the required blocks")
+		
+		data = sheet.get_data_from_sheet()
+		print(data)
+		data = [[ None if e == "nan" else e for e in i ] for i in data] #replace nan with None
+		print(data)
+		
+		boardman.set_board(data)
+		boardman.print_board(boardman.board)
+		
+		
+		count = 0
+		
 	
-	boardman.set_board(data)
-	boardman.print_board(boardman.board)
 		
 	#print("lmao")
 	

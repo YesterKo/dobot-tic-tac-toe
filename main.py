@@ -13,8 +13,8 @@ print("Virtual mode - place blocks in the sheet and the robot moves the blocks o
 physical = False #if input("Physical or virtual? ").upper()=="Physical".upper() else False
 print(physical)
 
-#cam = CameraMan()
-#dobot = DobotBot("/dev/ttyUSB0")
+cam = CameraMan()
+dobot = DobotBot("/dev/ttyUSB0")
 
 calib = False
 
@@ -29,7 +29,7 @@ with open("coords.txt","r") as file:
         calib = True
 
 print(coords)
-#cam.startCam(False)
+cam.startCam(False)
 
 if not calib:
     if input("Do you want to calibrate again? ").lower() == "yes":
@@ -74,15 +74,15 @@ if calib:
 
 else:
     print("bro")
-    #dobot.dobot.move_to(coords[0],coords[1],coords[2],0,wait=True)
-    #dobot.setHome()    
+    dobot.dobot.move_to(coords[0],coords[1],coords[2],0,wait=True)
+    dobot.setHome()    
 
 print("The robot will now proceed to go to the position of each square.")
 print("Please confirm that the square locations are correct and if nescessary, recalibrate")
 
-#for i in range(12):
-#    dobot.goToPos(i)
-#dobot.go_home()
+for i in range(12):
+    dobot.goToPos(i)
+dobot.go_home()
 
 print("Place the blocks and press space")
 placing = True
@@ -137,11 +137,11 @@ else:
                 count+=1
         
         for block in to_remove:
-        #    dobot.remove_block(block[0],block[1])
+            dobot.remove_block(block[0],block[1])
             print("removing: ",block)
         
         for block in to_place:
-        #    dobot.place_block(block[0],block[1])
+            dobot.place_block(block[0],block[1])
             print("placing: ",block)
     
         
@@ -157,4 +157,3 @@ else:
     #dobot.place_block("b",6)
     #dobot.place_block("b",0)
     #dobot.place_block("b",8)
-    

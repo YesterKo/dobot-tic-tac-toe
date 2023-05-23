@@ -71,14 +71,16 @@ if calib:
             coords = dobot.setHome()
             with open("coords.txt","w") as file:
                 file.writelines([str(i)+"\n" for i in coords])
+    print("The robot will now proceed to go to the position of each square.")
+    print("Please confirm that the square locations are correct and if nescessary, recalibrate")
 
+    for i in range(12):
+        dobot.goToPos(i)
+    dobot.go_home()
 else:
     print("bro")
     dobot.dobot.move_to(coords[0],coords[1],coords[2],0,wait=True)
     dobot.setHome()    
-
-print("The robot will now proceed to go to the position of each square.")
-print("Please confirm that the square locations are correct and if nescessary, recalibrate")
 
 for i in range(12):
     dobot.goToPos(i)
@@ -137,12 +139,21 @@ else:
                 count+=1
         
         for block in to_remove:
+<<<<<<< HEAD
             dobot.remove_block(block[0],block[1])
+=======
+>>>>>>> 79f429263e0505ba27343a08aa7a01d5b201baa8
             print("removing: ",block)
+            dobot.remove_block(block[0],block[1])
         
         for block in to_place:
+<<<<<<< HEAD
             dobot.place_block(block[0],block[1])
+=======
+>>>>>>> 79f429263e0505ba27343a08aa7a01d5b201baa8
             print("placing: ",block)
+            dobot.place_block(block[0],block[1])
+            
     
         
     #print("lmao")

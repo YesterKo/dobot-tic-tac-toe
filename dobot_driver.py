@@ -56,6 +56,7 @@ class DobotBot:
         except:
             print("Something broke, attempting to return home...")
             try:
+                self.succ(False)
                 pose = self.dobot.pose()
                 self.dobot.move_to(pose[0],pose[1],100,0,wait=True)
                 self.go_home()
@@ -83,14 +84,14 @@ class DobotBot:
         height = self.start_z-40+24*size 
         positions = self.positions
         
-        self.dobot.move_to(positions[pos][0],positions[pos][1],self.start_z-56,0,wait=True)
+        self.dobot.move_to(positions[pos][0],positions[pos][1],self.start_z-48,0,wait=True)
         self.move_increment(0,0,-10)
         self.succ(True)
-        self.move_increment(0,0,30)
+        self.move_increment(0,0,40)
         self.dobot.move_to(positions[stack][0],positions[stack][1],height,0,wait=True)
         self.succ(False)
         self.move_increment(0,0,30)
-        self.go_Home()
+        self.go_home()
         
         size+=1
         
@@ -150,8 +151,7 @@ class DobotBot:
                     (x+105,y+40),
                     (x+70,y+90), #red stack
                     (x+70,y-80), #blue stack
-                    (x,y)
-                    )
+                    (x,y))
         return (self.start_x,self.start_y,self.start_z)
                    
     def calibHeight(self):

@@ -82,9 +82,7 @@ else:
     dobot.dobot.move_to(coords[0],coords[1],coords[2],0,wait=True)
     dobot.setHome()    
 
-for i in range(12):
-    dobot.goToPos(i)
-dobot.go_home()
+
 
 print("Place the blocks and press space")
 placing = True
@@ -139,18 +137,10 @@ else:
                 count+=1
         
         for block in to_remove:
-<<<<<<< HEAD
-            dobot.remove_block(block[0],block[1])
-=======
->>>>>>> 79f429263e0505ba27343a08aa7a01d5b201baa8
             print("removing: ",block)
             dobot.remove_block(block[0],block[1])
         
         for block in to_place:
-<<<<<<< HEAD
-            dobot.place_block(block[0],block[1])
-=======
->>>>>>> 79f429263e0505ba27343a08aa7a01d5b201baa8
             print("placing: ",block)
             dobot.place_block(block[0],block[1])
             
@@ -168,3 +158,4 @@ else:
     #dobot.place_block("b",6)
     #dobot.place_block("b",0)
     #dobot.place_block("b",8)
+    

@@ -6,4 +6,4 @@ It features 2 modes:
 
 Physical mode is yet to be implemented
 
-Tested and working on arch linux (with some errors in the pydobot libary at times)
+Tested and working on arch linux

@@ -25,6 +25,12 @@ class DobotBot:
     def move_increment(self,x,y,z):
         pose = self.dobot.pose() #tuple containing x,y,z,r,j1,j2,j3,j4
         self.move_to(pose[0]+x,pose[1]+y,pose[2]+z,0)
+        
+    def go_home(self):
+        self.move_to(self.start_x, self.start_y, self.start_z, 0)
+    
+    def succ(self, state):
+        self.dobot.suck(state)
 
     def place_block(self,color,pos): #pos 0-8, color blue or red
         #pos 3
@@ -96,6 +102,9 @@ class DobotBot:
         else:
             self.blue_stack=size
     
+    def calibHeight(self):
+        self.move_increment(0,0,80) #move to z height of 70 (from the ground)
+    
     def calibMove(self):
         print("movedcalib")
         x = self.x_offset
@@ -112,12 +121,6 @@ class DobotBot:
             self.y_offset = y_offset
             self.thread.start()
             print("started")
-        
-        
-        #self.start_x = x
-        #self.start_y = y
-        #self.start_z = z
-
 
     def goToPos(self,position):
         pos = self.positions[position]
@@ -145,16 +148,6 @@ class DobotBot:
                     (x+70,y-80), #blue stack
                     (x,y))
         return (self.start_x,self.start_y,self.start_z)
-                   
-    def calibHeight(self):
-        self.move_increment(0,0,80) #move to z height of 70 (from the ground)
         
-    def go_home(self):
-        self.move_to(self.start_x, self.start_y, self.start_z, 0)
-    
-    def succ(self, state):
-        self.dobot.suck(state)
-        
-# 255 -35 -71
 
 

@@ -25,22 +25,6 @@ class DobotBot:
     def move_increment(self,x,y,z):
         pose = self.dobot.pose() #tuple containing x,y,z,r,j1,j2,j3,j4
         self.move_to(pose[0]+x,pose[1]+y,pose[2]+z,0)
-        
-    def move_bot(self,siit,sinna):
-        if siit == 10:
-            z = self.red_stack * 24 + self.start_z
-            self.red_stack -= 1
-        if siit == 11:
-            z = self.blue_stack * 24 + self.start_z
-            self.blue_stack -= 1
-        else: z = 24 + self.start_z
-        self.go_home()
-        self.move_to(self.positions[siit][0], self.positions[siit][1], z, 0)
-        self.dobot.suck(1)
-        self.go_home()
-        self.move_to(self.positions[sinna][0], self.positions[sinna][1], z, 0)
-        self.dobot.suck(0)
-        self.go_home()
 
     def place_block(self,color,pos): #pos 0-8, color blue or red
         #pos 3

@@ -14,7 +14,7 @@ physical = False #if input("Physical or virtual? ").upper()=="Physical".upper() 
 print(physical)
 
 cam = CameraMan()
-dobot = DobotBot("/dev/ttyUSB1")
+dobot = DobotBot("/dev/ttyUSB0")
 
 calib = False
 

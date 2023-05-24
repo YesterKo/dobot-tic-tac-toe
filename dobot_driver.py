@@ -12,21 +12,25 @@ class DobotBot:
         self.blue_stack = 5
         self.thread = None
 
-    def move_bot(self,siit,sinna):
-        if siit == 10:
-            z = self.red_stack * 24 + self.start_z
-            self.red_stack -= 1
-        if siit == 11:
-            z = self.blue_stack * 24 + self.start_z
-            self.blue_stack -= 1
-        else: z = 24 + self.start_z
-        self.go_home()
-        self.dobot.move_to(self.positions[siit][0], self.positions[siit][1], z, 0)
-        self.dobot.suck(1)
-        self.go_home()
-        self.dobot.move_to(self.positions[sinna][0], self.positions[sinna][1], z, 0)
-        self.dobot.suck(0)
-        self.go_home()
+    def move_to(self,x,y,z,r):
+        self.dobot.move_to(x,y,z,r)
+        prevpos=[0,0,0]
+        #this needs to be done because the wait=True in dobot.move_to is broken and stops the bot, so I made my own
+        while True: #I can't believe this works lmao
+            pose = self.dobot.pose()
+            if [pose[0],pose[1],pose[2]]==prevpos:
+                return;
+            prevpos = [pose[0],pose[1],pose[2]]
+                
+    def move_increment(self,x,y,z):
+        pose = self.dobot.pose() #tuple containing x,y,z,r,j1,j2,j3,j4
+        self.move_to(pose[0]+x,pose[1]+y,pose[2]+z,0)
+        
+    def go_home(self):
+        self.move_to(self.start_x, self.start_y, self.start_z, 0)
+    
+    def succ(self, state):
+        self.dobot.suck(state)
 
     def place_block(self,color,pos): #pos 0-8, color blue or red
         #pos 3
@@ -43,13 +47,13 @@ class DobotBot:
         positions = self.positions
         
         try:
-            self.dobot.move_to(pose[0],pose[1],height,0,wait=True)
-            self.dobot.move_to(positions[stack][0],positions[stack][1],height,0,wait=True)
+            self.move_to(pose[0],pose[1],height,0)
+            self.move_to(positions[stack][0],positions[stack][1],height,0)
             self.move_increment(0,0,-10)
             self.succ(True)
             self.move_increment(0,0,30)
-            self.dobot.move_to(positions[pos][0],positions[pos][1],height+10,0,wait=True)
-            self.dobot.move_to(positions[pos][0],positions[pos][1],self.start_z-56,0,wait=True)
+            self.move_to(positions[pos][0],positions[pos][1],height+30,0)
+            self.move_to(positions[pos][0],positions[pos][1],self.start_z-56,0)
             self.succ(False)
             self.move_increment(0,0,30)
             self.go_home()
@@ -58,7 +62,7 @@ class DobotBot:
             try:
                 self.succ(False)
                 pose = self.dobot.pose()
-                self.dobot.move_to(pose[0],pose[1],100,0,wait=True)
+                self.move_to(pose[0],pose[1],100,0)
                 self.go_home()
             except:
                 print("Error returning home")
@@ -69,9 +73,6 @@ class DobotBot:
             self.red_stack=size
         else:
             self.blue_stack=size
-    
-    
-    
     
     def remove_block(self,color,pos): #move block back to it's stack
         if color == "r":
@@ -84,11 +85,12 @@ class DobotBot:
         height = self.start_z-40+24*size 
         positions = self.positions
         
-        self.dobot.move_to(positions[pos][0],positions[pos][1],self.start_z-48,0,wait=True)
+        self.move_to(positions[pos][0],positions[pos][1],self.start_z-48,0)
         self.move_increment(0,0,-10)
         self.succ(True)
         self.move_increment(0,0,40)
-        self.dobot.move_to(positions[stack][0],positions[stack][1],height,0,wait=True)
+        self.move_to(positions[stack][0],positions[stack][1],height+30,0)
+        self.dobot.move_increment(0,0,-40)
         self.succ(False)
         self.move_increment(0,0,30)
         self.go_home()
@@ -100,9 +102,8 @@ class DobotBot:
         else:
             self.blue_stack=size
     
-    def move_increment(self,x,y,z):
-        pose = self.dobot.pose() #tuple containing x,y,z,r,j1,j2,j3,j4
-        self.dobot.move_to(pose[0]+x,pose[1]+y,pose[2]+z,0,wait=True)
+    def calibHeight(self):
+        self.move_increment(0,0,80) #move to z height of 70 (from the ground)
     
     def calibMove(self):
         print("movedcalib")
@@ -120,16 +121,10 @@ class DobotBot:
             self.y_offset = y_offset
             self.thread.start()
             print("started")
-        
-        
-        #self.start_x = x
-        #self.start_y = y
-        #self.start_z = z
-
 
     def goToPos(self,position):
         pos = self.positions[position]
-        self.dobot.move_to(pos[0],pos[1],self.start_z-60,0,wait=True)
+        self.move_to(pos[0],pos[1],self.start_z-60,0)
         
     def setHome(self):
         self.start_x = self.dobot.pose()[0]
@@ -153,16 +148,6 @@ class DobotBot:
                     (x+70,y-80), #blue stack
                     (x,y))
         return (self.start_x,self.start_y,self.start_z)
-                   
-    def calibHeight(self):
-        self.move_increment(0,0,80) #move to z height of 70 (from the ground)
         
-    def go_home(self):
-        self.dobot.move_to(self.start_x, self.start_y, self.start_z, 0,wait=True)
-    
-    def succ(self, state):
-        self.dobot.suck(state)
-        
-# 255 -35 -71
 
 

@@ -66,13 +66,9 @@ class CameraMan():
             #setting color range 
             lower_pink = np.array([40, 20, 65], dtype = "uint8") 
             upper_pink= np.array([181, 111, 190], dtype = "uint8")     
-          
             mask_pink = cv2.inRange(img, lower_pink, upper_pink) #colour mask
-            
             blur = cv2.GaussianBlur(img, (5, 5),cv2.BORDER_DEFAULT) #gaussian blur version of image
-            
             pink_out = cv2.bitwise_and(blur, blur, mask =  mask_pink) #creating the pink out mask
-                 
             pink_out = cv2.cvtColor(pink_out, cv2.COLOR_BGR2GRAY) #converting board mask to grayscale
             
             #centerpoint detection
@@ -119,6 +115,24 @@ class CameraMan():
             mask_red = cv2.inRange(img, lower_red, upper_red)
             red_out = cv2.bitwise_and(img, img, mask =  mask_red) 
             
+            red_bw = cv2.cvtColor(red_out, cv2.COLOR_BGR2GRAY)
+            
+            ret, thresh = cv2.threshold(red_bw,80,255,0)
+            contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            imout = cv2.drawContours(image, contours, -1, (255,255,0), 3)
+            
+            contours2 = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
+            
+            for i in contours2:
+                M = cv2.moments(i)
+                x,y,w,h = cv2.boundingRect(i)
+                if w>10 and h>10:
+                    if M['m00'] != 0:
+                        cx = int(M['m10']/M['m00'])
+                        cy = int(M['m01']/M['m00'])
+                        cv2.drawContours(image, [i], -1, (255, 255, 0), 2)
+                        cv2.circle(image, (cx, cy), 7, (255, 0, 0), -1)
+                        cv2.putText(image, "red", (cx - 20, cy - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
             
             #blue block detection
             
@@ -127,7 +141,24 @@ class CameraMan():
             mask_blue = cv2.inRange(img, lower_blue, upper_blue)
             blue_out = cv2.bitwise_and(img, img, mask =  mask_blue) 
             
+            blue_bw = cv2.cvtColor(blue_out, cv2.COLOR_BGR2GRAY)
             
+            ret, thresh = cv2.threshold(red_bw,80,255,0)
+            contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            imout = cv2.drawContours(image, contours, -1, (0,255,255), 3)
+            
+            contours2 = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
+            
+            for i in contours2:
+                M = cv2.moments(i)
+                x,y,w,h = cv2.boundingRect(i)
+                if w>10 and h>10:
+                    if M['m00'] != 0:
+                        cx = int(M['m10']/M['m00'])
+                        cy = int(M['m01']/M['m00'])
+                        cv2.drawContours(image, [i], -1, (0, 255, 255), 2)
+                        cv2.circle(image, (cx, cy), 7, (255, 0, 0), -1)
+                        cv2.putText(image, "blue", (cx - 20, cy - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
             
             
             self.red_out = red_out #red blocks

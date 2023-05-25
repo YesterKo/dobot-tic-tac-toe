@@ -40,10 +40,10 @@ if calib:
     print("Please align the robot to so the suction cup is on the playing field in the middle below the grid")
     print("After you're done, press space")
     while initializing:
-        camera = cam.getCam("img")
+        camera = cam.getCam("image")
         if camera is not None:
                 if camera.shape[0] > 0:
-                    cv2.imshow("img",camera)
+                    cv2.imshow("Output",camera)
                     if cv2.waitKey(1) & 0xFF==ord('q'):
                         exit()
         if keyboard.is_pressed("space"):
@@ -58,10 +58,10 @@ if calib:
     calibrating = True
     while calibrating:
         print("Current offset:","X:",cam.getOffset()[1],"Y:",cam.getOffset()[0],)
-        camera = cam.getCam("img")
+        camera = cam.getCam("image")
         if camera is not None:
             if camera.shape[0] > 0:
-                cv2.imshow("img",camera)
+                cv2.imshow("Output",camera)
         if cv2.waitKey(1) & 0xFF==ord('q'):
             exit()
         dobot.calibrate(cam.getOffset()[1],cam.getOffset()[0])
@@ -98,10 +98,10 @@ if physical:
     running = True
     
     while running: #idk if this is the correct way of doing this, but it doesn't matter that much
-        camera = cam.getCam("img")
+        camera = cam.getCam("image")
         blue = cam.getCam("blue_out")
         red = cam.getCam("red_out")
-        cv2.imshow("img",camera)
+        cv2.imshow("image",camera)
         cv2.imshow("blue",blue)
         cv2.imshow("red",red)
         if cv2.waitKey(1) & 0xFF==ord('q'):

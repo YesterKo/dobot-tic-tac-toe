@@ -20,7 +20,7 @@ class CameraMan():
         self.image = None
         self.img = None
         
-     def startCam(self, verbose): #figure out how to do this
+    def startCam(self, verbose): #figure out how to do this
         cap = self.cap
         if not cap.isOpened():
             cap = cv2.VideoCapture(4)
@@ -106,7 +106,7 @@ class CameraMan():
             cv2.line(image,(0,int(height)),(int(width),0),(255,0,0),5)
             
             
-            
+            s
             
             #red block detection
 

@@ -135,17 +135,17 @@ class DobotBot:
         y = self.start_y
         
         self.positions = (
-                    (x+35,y-30), #squares 1-9
-                    (x+35,y+5),
-                    (x+35,y+40),
-                    (x+70,y-30),
-                    (x+70,y+5),
-                    (x+70,y+40),
-                    (x+105,y-30),
-                    (x+105,y+5),
-                    (x+105,y+40),
-                    (x+70,y+90), #red stack
-                    (x+70,y-80), #blue stack
+                    (x+30,y-25), #squares 1-9
+                    (x+30,y+5),
+                    (x+30,y+40),
+                    (x+65,y-30),
+                    (x+65,y+5),
+                    (x+65,y+40),
+                    (x+100,y-30),
+                    (x+100,y+5),
+                    (x+100,y+40),
+                    (x+65,y+90), #red stack
+                    (x+60,y-90), #blue stack
                     (x,y))
         return (self.start_x,self.start_y,self.start_z)
         

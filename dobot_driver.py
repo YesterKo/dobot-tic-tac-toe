@@ -90,7 +90,7 @@ class DobotBot:
         self.succ(True)
         self.move_increment(0,0,40)
         self.move_to(positions[stack][0],positions[stack][1],height+30,0)
-        self.dobot.move_increment(0,0,-40)
+        self.move_increment(0,0,-40)
         self.succ(False)
         self.move_increment(0,0,30)
         self.go_home()
@@ -145,7 +145,7 @@ class DobotBot:
                     (x+100,y+5),
                     (x+100,y+40),
                     (x+65,y+90), #red stack
-                    (x+60,y-90), #blue stack
+                    (x+60,y-90), #blue  
                     (x,y))
         return (self.start_x,self.start_y,self.start_z)
         

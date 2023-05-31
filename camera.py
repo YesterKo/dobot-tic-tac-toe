@@ -106,7 +106,7 @@ class CameraMan():
             cv2.line(image,(0,int(height)),(int(width),0),(255,0,0),5)
             
             
-            s
+            
             
             #red block detection
 
@@ -126,7 +126,7 @@ class CameraMan():
             for i in contours2:
                 M = cv2.moments(i)
                 x,y,w,h = cv2.boundingRect(i)
-                if w>10 and h>10:
+                if w>5 and h>5:
                     if M['m00'] != 0:
                         cx = int(M['m10']/M['m00'])
                         cy = int(M['m01']/M['m00'])
@@ -152,7 +152,7 @@ class CameraMan():
             for i in contours2:
                 M = cv2.moments(i)
                 x,y,w,h = cv2.boundingRect(i)
-                if w>10 and h>10:
+                if w>5 and h>5:
                     if M['m00'] != 0:
                         cx = int(M['m10']/M['m00'])
                         cy = int(M['m01']/M['m00'])
